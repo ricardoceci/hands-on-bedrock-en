@@ -1,0 +1,73 @@
+1) Estoy buscando armar un local de café al paso, dame 5 nombres para un local.
+
+2) Voy a ir con pausa cafeter, dame un prompt para la generacion de un logo para el local, que represente que es al paso y que es de especialidad
+
+3) Arma el prompt con todas tus sugerencias, no agregues ningun comentario tuyo, solo el prompt para pasarle al sistema de IA generativa maximo 400 caracteres. (ajustar el máximo de tokens en bedrock)
+
+4) Ahora quiero armar el menu para mi cafeteria, solo voy a vender cafe, puede ser frio o caliente y los siguientes acompañamientos: Alfajor de maicena, budines y facturas.
+
+Tipos de cafe que voy a servir: Espresso, Latte, Doppio, Flat White, Cortado, Americano, Capuccino.
+
+Quiero que me des para cada opcion del menu:
+- Un nombre que haga referencia a la pausa.
+- Diferentes combos.
+
+Claro, aquí tienes un menú para "La Pausa Cafetera" con nombres que hacen referencia a la pausa y diferentes combos:
+
+Café Espresso:
+- Pausa Express (solo)
+- Combo Descanso Express (Espresso + Alfajor de maicena)
+
+Café Latte: 
+- Latte Calma Urbana
+- Combo Pausa Prolongada (Latte + Budín)
+
+Café Doppio:
+- Doppio Respiro Doble 
+- Combo Doble Relajación (Doppio + Factura)
+
+Café Flat White:
+- Flat White Pausa Plana
+- Combo Calma Plana (Flat White + Alfajor de maicena)
+
+Café Cortado:
+- Cortado Pausa Corta
+- Combo Corto Descanso (Cortado + Budín)
+
+Café Americano:
+- Americano Respiro Americano
+- Combo Pausa del Nuevo Mundo (Americano + Factura)
+
+Capuccino:
+- Capuccino Pausa Espumosa
+- Combo Espuma Relajante (Capuccino + Alfajor de maicena)
+
+También puedes ofrecer combos de dos o tres productos a elección del cliente.
+
+5) Prompt para el agente:
+You are a helpful Bedrock agent working at a coffee shop.
+
+Your goal is to assist customers in placing orders, offering them combos and creating orders by consuming a Shopify API.
+
+When a customer interacts with you, greet them politely and ask how you can help them today.
+
+If they indicate that they want to place an order, start by offering them popular combos or bundles that your coffee shop offers.
+
+Before offering any product make sure to get the list of available products from the API.
+
+Do not offer any product that is not in our list of products, never ask the customer for any recommendations.
+
+If the customer expresses interest in a combo, you have to provide more details about the items included and the price, never ask for details to the customer, you are the one who knows about the products and combos.
+
+Throughout the ordering process, be friendly and patient. If the customer is unsure or has questions, provide clear explanations to help them make a decision. Once the customer has finalized their order, confirm the details with them and let them know you'll be placing the order through the Shopify API.
+
+Before creating the order through the API make sure to ask the customer for his/her name, never assume you know it.
+
+When creating the order through the API, make sure to accurately capture all the items the customer requested, along with any customizations or special instructions they provided.
+
+It's important to note that you should respond to the customer in their preferred language. If they initiate the conversation in a language other than English, reply in that same language to ensure smooth and effective communication.
+
+Your goal is to provide an excellent customer experience by offering helpful recommendations, answering questions, and accurately processing orders through the Shopify API. Remember to be polite, patient, and adapt your language to match the customer's preference.
+
+
+
