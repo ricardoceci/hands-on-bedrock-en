@@ -1,49 +1,54 @@
-
-<h3 align="center">Bedrock Hands On</h3>
-
-
-
----
-
-<p align="center"> Este es el repositorio de la charla dada en el GenAI Day 2024 - En Buenos Aires Argentina
-    <br> 
-</p>
-
 Hoy te explicaré cómo poner manos a la obra con Bedrock de manera segura y confiable y de paso, aprender un poco sobre café.
 
-Aprenderás cómo consumir la API de Bedrock de modelos de Texto y Multimodales utilizando Python y crearás un agente que se conecta a una API de Shopify para tomar pedidos.
+Aprenderás cómo consumir la [API de Amazon Bedrock](https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/what-is-bedrock.html) de modelos de Texto y Multimodales utilizando Python para poder generar nombres, logo y menú para tu cafetería y para poder crear un agente que se conecta a una API de Shopify para tomar pedidos.
 
-Además crearás un frontend utilizando Streamlit para dar una experiencia de usuario única y darle vida a tu agente.
+Shopify es (a mi criterio) la mejor plataforma de eCommerce que existe.
 
-## 📝 Table of Contents
+Y así como AWS, [Shopify](https://shopify.com) tiene una API para todo y una [plataforma para desarrolladores](https://shopify.dev/)
+
+Por último crearás un frontend utilizando Streamlit para dar una experiencia de usuario única y darle vida a tu agente.
+
+## 📝 Indice
 
 - [Invocando la API de Bedrock](#bedrockapi)
-- [Agente Shopify](#Agente)
+- [Creación de un agente de Amazon Bedrock que interactúa con Shopify](#Agente)
 
 
-## 🧐 Ejemplos <a name = "BedrockApi"></a>
+## 🧐 Invocando la API de Amazon Bedrock para generar nombres, logo y menú para tu cafetería<a name = "BedrockApi"></a>
 
-En la carpeta bedrock_examples encontrarás los ejemplos utilizados durante el evento.
-En la carpeta prompts encontrarás los prompts utilizados durante la charla, estos prompts vas a poder utilizarlos para generar todo el contenido tanto en el playground de Bedrock cómo invocando la API desde Python.
+El momento de abrir una cafetería o de tener ideas creativas para el negocio que fuese es una excelente oportunidad para apoyarse en la IA Generativa (GenAI) y sacar su máximo provecho.
 
-Instrucciones:
+A través de Amazon Bedrock puedes hacer uso de ella, pero... ¿Cómo se consume ese servicio?
+
+Todo servicio en AWS tiene una API, y Amazon Bedrock no es la excepción, a continuación te explico cómo consumir la API de Amazon Bedrock a través de un ejemplo para generar nombres y un menú para una Cafetería al paso.
+
+Y además te muestro cómo consumir un modelo multimodal capaz de analizar imágenes.
+
+Instrucciones para programar un script en Python para ejecutar localmente o en una función Lambda para invocar a Amazon Bedrock:
+
 Primero debes habilitar el acceso a los modelos en Bedrock [Instrucciones aqui](https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/model-access-modify.html)
 
 Requisitos:
+
+- Una cuenta en AWS, si no tienes una cuenta, puedes abrir una [aqui](https://signin.aws.amazon.com/signup?request_type=register)
 - AWS CLI [Instrucciones aqui](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - Python 3.11 o superior
 
-Te recomiendo crear un entorno virtual de Python [Instrucciones aqui](https://docs.python.org/es/3.12/tutorial/venv.html)
+Paso 1) Crear un entorno virtual de Python [Instrucciones aqui](https://docs.python.org/es/3.12/tutorial/venv.html)
 
-Instalar los requerimientos
+En la carpeta bedrock_examples de [este repositorio](https://github.com/ricardoceci/hands-on-bedrock) encontrarás diferentes ejemplos utilizados a continuación para invocar el modelo fundacional.
+
+En la carpeta prompts encontrarás los prompts de ejemplo, que vas a poder utilizar para generar El nombre, el Menú y un prompt para pasarle a un modelo de generación de imágenes que podrás invocar tanto en el [playground de Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/playgrounds.html) cómo invocando la API desde Python.
+
+Paso 2) Instalar los requerimientos
 
 ```
 pip install -r requirements.txt
 ```
 
-## Configurar Boto3
+Paso 3) Configurar Boto3 [Mas info sobre boto3](https://aws.amazon.com/es/sdk-for-python/)
 
-Aqui configuro el cliente de AWS indicandole que utilice el perfil genaiday instalado en mi computadora y llamo al cliente de bedrock-runtime que me va a permitri invocar al modelo fundacional.
+Aqui configuro el cliente de AWS indicandole que utilice el perfil genaiday instalado en mi computadora y llamo al cliente de **bedrock-runtime** que me va a permitir invocar al modelo fundacional.
 
 ```python
 #Cambiar la region y el perfil de AWS
@@ -51,9 +56,9 @@ aws = boto3.session.Session(profile_name='genaiday', region_name=region)
 client = aws.client('bedrock-runtime')
 ```
 
-## Invocar modelo de texto
+Paso 4) Ejemplo: Invocar modelo de texto
 
-Esta función llama al método invoke_model y le paso el prompt indicado por el usuario y le devuelvo la respuesta
+Esta función llama al método **invoke_model** y le paso el prompt indicado por el usuario y le devuelvo la respuesta
 
 La parte más importante son los mensajes enviados:
 
@@ -103,9 +108,9 @@ print("Haiku")
 print(call_text("Estoy buscando armar un local de café al paso, dame 5 nombres para un local.")
 ```
 
-## Invocar a un modelo multimodal.
+Paso 5) Ejemplo: Invocar a un modelo multimodal.
 
-Aquí el proceso es similar, solo que hay que agregar el mime type del archivo enviado, para esto hay una función que en base al nombre del archivo obtiene el mimetype
+Aquí el proceso es similar, solo que **hay que agregar el mime type** del archivo enviado, para esto hay una función que en base al nombre del archivo obtiene el mimetype
 
 ```python
 def read_mime_type(file_path):
@@ -141,7 +146,8 @@ Luego para invocar al modelo, los mensajes deben ser los siguientes:
 
 La invocación del modelo queda así:
 
-```def call_multimodal(file,caption,modelId="anthropic.claude-3-haiku-20240307-v1:0"):
+```python
+def call_multimodal(file,caption,modelId="anthropic.claude-3-haiku-20240307-v1:0"):
     #esta funcion es para llamar a un modelo multimodal con una imagen y un texto
     config = {
     "anthropic_version": "bedrock-2023-05-31",
@@ -189,7 +195,7 @@ print("Sonnet")
 print(call_image(pic_path,caption,"anthropic.claude-3-sonnet-20240229-v1:0"))
 ```
 
-## 🏁 El agente de Shopify <a name = "agente"></a>
+## 🏁 Creación de un agente de Amazon Bedrock que interactúa con Shopify <a name = "agente"></a>
 
 Para crear un agente de Amazon Bedrock:
 
@@ -257,12 +263,12 @@ Los grupos de acción para ejecutarse generalmente invocan una función Lambda, 
 
 - Elegir una funcion lambda ya creada [aqui](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-lambda.html) las instrucciones de cómo es el evento y la respuesta esperada por cada action group (grupo de acción)
 
-Si eliges crear la función lambda desde la consola de Bedrock, se creará una función en python con un código fuente básico que luego deberás modificar, en este repo en el archivo agents/action_group/lambda.py tienes el código de ejemplo modificado para que funcione con el agente.
+Si eliges crear la función lambda desde la consola de Bedrock, se creará una función en python con un código fuente básico que luego deberás modificar, en este [repo](https://github.com/ricardoceci/hands-on-bedrock/) en el archivo agents/action_group/lambda.py tienes el código de ejemplo modificado para que funcione con el agente.
 
 Estas son las variables que te entregarán la información necesaria:
 
-- function: es el nombre de la acción invocada, en el caso del ejemplo puede ser: get_products (para listar productos), y place_order (para generar la orden en Shopify)
-- parameters: es un diccionario de parámetros.
+- **function**: es el nombre de la acción invocada, en el caso del ejemplo puede ser: get_products (para listar productos), y place_order (para generar la orden en Shopify)
+- **parameters**: es un diccionario de parámetros.
 
 
 En el siguiente ejemplo puedes observar que hay dos acciones:
@@ -287,6 +293,8 @@ Entonces, por ejemplo cuando se llame a la función get_products en la función 
 Hay una función get_products definida que será la encargada de hacer la query a la API de Shopify (A fines didácticos retornamos todos los productos)
 
 Si quieres que esto funcione en Shopify debes reemplazar las siguientes variables por las de tu tienda:
+
+
 
 ```python
 access_token = 'shpat_XXXXX'
@@ -362,13 +370,15 @@ def lambda_handler(event, context):
         }
 ```
 
-El código fuente completo de la función lambda (con los requerimientos) esta en agents/action_group/lambda.py
+Los fragmentos de código expuestos anteriormente son parte de la función lambda que se encuentra [aqui](https://github.com/ricardoceci/hands-on-bedrock/blob/master/agents/action_group/lambda.py)
 
 10) Presionar Guardar y Salir, y listo!, ya el agente esta listo para ser probado.
 
-11) Lo siguiente es probar el agente y validar que funcione, desde Bedrock puedes hacer las pruebas del agente, y si durante la conversación clickeas "Ver traza o Show Trace" te va a ir mostrando el proceso de razonamiento, aqui es donde debes prestar especial atención y hacer los ajustes que creas necesarios en el prompt o bien buscar otro modelo si ves que el que elgiste no funciona como esperabas.
+## El Agente en acción
 
-12) Una vez que estes conforme con el agente, puedes crear un Alias, un alias es un ID a través del cual vas a poder invocar al agente desde la API de Amazon Bedrock, cuando crees el alias, te va a crear una versión del agente automáticamente, o puedes apuntar a una versión ya existente, tener diferentes alias y diferentes versiones te va a ayudar a controlar el proceso de despliegue del agente, por ejemplo:
+Lo siguiente es probar el agente y validar que funcione, desde Bedrock puedes hacer las pruebas del agente, y si durante la conversación clickeas "Ver traza o Show Trace" te va a ir mostrando el proceso de razonamiento, aqui es donde debes prestar especial atención y hacer los ajustes que creas necesarios en el prompt o bien buscar otro modelo si ves que el que elgiste no funciona como esperabas.
+
+Una vez que estes conforme con el agente, puedes crear un Alias, un alias es un ID a través del cual vas a poder invocar al agente desde la API de Amazon Bedrock, cuando crees el alias, te va a crear una versión del agente automáticamente, o puedes apuntar a una versión ya existente, tener diferentes alias y diferentes versiones te va a ayudar a controlar el proceso de despliegue del agente, por ejemplo:
 - Puedes tener un alias "development" que va a ir a las ultimas pruebas del Agente
 - Un alias "preprod" que sería el agente en modo pre producción
 - Un alias "prod" y este es el agente live.
@@ -377,7 +387,7 @@ Luego solo restaría apuntar el alias de producción correspondiente a la versi�
 
 Cómo invocar el agente
 
-Para esto, en la carpeta agents/frontend he dejado un archivo que se llama agent.py.
+Para esto, en la carpeta [agents/frontend](https://github.com/ricardoceci/hands-on-bedrock/tree/master/agents/frontend) he dejado un archivo que se llama agent.py.
 
 Este desarrollo utiliza [Streamlit](https://streamlit.io/), un poderoso framework para realizar aplicaciones de muestra de machine learning
 
