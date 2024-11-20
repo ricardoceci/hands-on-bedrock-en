@@ -1,54 +1,59 @@
-Hoy te explicaré cómo poner manos a la obra con Bedrock de manera segura y confiable y de paso, aprender un poco sobre café.
+# Getting Started with Amazon Bedrock
 
-Aprenderás cómo consumir la [API de Amazon Bedrock](https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/what-is-bedrock.html) de modelos de Texto y Multimodales utilizando Python para poder generar nombres, logo y menú para tu cafetería y para poder crear un agente que se conecta a una API de Shopify para tomar pedidos.
+Today, I'll explain how to get hands-on with Bedrock safely and reliably while also learning a bit about coffee.
 
-Shopify es (a mi criterio) la mejor plataforma de eCommerce que existe.
+You’ll learn how to use the [Amazon Bedrock API](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html) for Text and Multimodal models using Python to generate names, logos, and menus for your coffee shop, and how to create an agent that connects to a Shopify API to take orders.
 
-Y así como AWS, [Shopify](https://shopify.com) tiene una API para todo y una [plataforma para desarrolladores](https://shopify.dev/)
+Shopify is (in my opinion) the best eCommerce platform out there.
 
-Por último crearás un frontend utilizando Streamlit para dar una experiencia de usuario única y darle vida a tu agente.
+And just like AWS, [Shopify](https://shopify.com) has an API for everything and a [developer platform](https://shopify.dev/).
 
-## 📝 Indice
+Lastly, you’ll create a frontend using Streamlit to deliver a unique user experience and bring your agent to life.
 
-- [Invocando la API de Bedrock](#bedrockapi)
-- [Creación de un agente de Amazon Bedrock que interactúa con Shopify](#Agente)
+## 📝 Table of Contents
+
+- [Invoking the Bedrock API](#bedrockapi)
+- [Creating an Amazon Bedrock Agent That Interacts with Shopify](#agent)
 
 
-## 🧐 Invocando la API de Amazon Bedrock para generar nombres, logo y menú para tu cafetería<a name = "BedrockApi"></a>
+## 🧐 Invoking the Amazon Bedrock API to to generate, logo and menu for your Coffee Store<a name = "bedrockapi"></a>
 
-El momento de abrir una cafetería o de tener ideas creativas para el negocio que fuese es una excelente oportunidad para apoyarse en la IA Generativa (GenAI) y sacar su máximo provecho.
+The moment of opening a coffee shop or coming up with creative business ideas is an excellent opportunity to leverage Generative AI (GenAI) and make the most of it.
 
-A través de Amazon Bedrock puedes hacer uso de ella, pero... ¿Cómo se consume ese servicio?
+With Amazon Bedrock, you can utilize it, but... how do you consume this service?
 
-Todo servicio en AWS tiene una API, y Amazon Bedrock no es la excepción, a continuación te explico cómo consumir la API de Amazon Bedrock a través de un ejemplo para generar nombres y un menú para una Cafetería al paso.
+Every AWS service has an API, and Amazon Bedrock is no exception. Below, I’ll explain how to consume the Amazon Bedrock API through an example to generate names and a menu for a coffee shop.
 
-Y además te muestro cómo consumir un modelo multimodal capaz de analizar imágenes.
+Additionally, I’ll show you how to consume a multimodal model capable of analyzing images.
 
-Instrucciones para programar un script en Python para ejecutar localmente o en una función Lambda para invocar a Amazon Bedrock:
+### Instructions for Writing a Python Script to Run Locally or in a Lambda Function to Invoke Amazon Bedrock
 
-Primero debes habilitar el acceso a los modelos en Bedrock [Instrucciones aqui](https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/model-access-modify.html)
+First, you need to enable access to models in Bedrock [Instructions here](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access-modify.html).
 
-Requisitos:
+### Requirements:
 
-- Una cuenta en AWS, si no tienes una cuenta, puedes abrir una [aqui](https://signin.aws.amazon.com/signup?request_type=register)
-- AWS CLI [Instrucciones aqui](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- Python 3.11 o superior
+- An AWS account. If you don’t have one, you can create it [here](https://signin.aws.amazon.com/signup?request_type=register).
+- AWS CLI [Instructions here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+- Python 3.11 or higher.
 
-Paso 1) Crear un entorno virtual de Python [Instrucciones aqui](https://docs.python.org/es/3.12/tutorial/venv.html)
+### Step 1: Create a Python Virtual Environment [Instructions here](https://docs.python.org/3.12/tutorial/venv.html)
 
-En la carpeta bedrock_examples de [este repositorio](https://github.com/ricardoceci/hands-on-bedrock) encontrarás diferentes ejemplos utilizados a continuación para invocar el modelo fundacional.
+In the `bedrock_examples` folder of [this repository](https://github.com/ricardoceci/hands-on-bedrock-en), you’ll find different examples used below to invoke the foundational model.
 
-En la carpeta prompts encontrarás los prompts de ejemplo, que vas a poder utilizar para generar El nombre, el Menú y un prompt para pasarle a un modelo de generación de imágenes que podrás invocar tanto en el [playground de Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/playgrounds.html) cómo invocando la API desde Python.
+In the `prompts` folder, you’ll find example prompts that you can use to generate:
+- The name.
+- The menu.
+- A prompt to pass to an image generation model, which you can invoke either in the [Amazon Bedrock Playground](https://docs.aws.amazon.com/bedrock/latest/userguide/playgrounds.html) or via the API using Python.
 
-Paso 2) Instalar los requerimientos
-
-```
+### Step 2: Install the Requirements
+```bash
 pip install -r requirements.txt
 ```
 
-Paso 3) Configurar Boto3 [Mas info sobre boto3](https://aws.amazon.com/es/sdk-for-python/)
 
-Aqui configuro el cliente de AWS indicandole que utilice el perfil genaiday instalado en mi computadora y llamo al cliente de **bedrock-runtime** que me va a permitir invocar al modelo fundacional.
+### Step 3: Configure Boto3 [More info on Boto3](https://aws.amazon.com/sdk-for-python/)
+
+Here, I configure the AWS client by specifying that it should use the `genaiday` profile installed on my computer. 
 
 ```python
 #Cambiar la region y el perfil de AWS
@@ -56,11 +61,11 @@ aws = boto3.session.Session(profile_name='genaiday', region_name=region)
 client = aws.client('bedrock-runtime')
 ```
 
-Paso 4) Ejemplo: Invocar modelo de texto
+### Step 4: Example - Invoking a Text Model
 
-Esta función llama al método **invoke_model** y le paso el prompt indicado por el usuario y le devuelvo la respuesta
+This function calls the **invoke_model** method, passing the prompt provided by the user and returning the response.
 
-La parte más importante son los mensajes enviados:
+The most important part is the messages sent:
 
 ```json
 {
@@ -101,27 +106,29 @@ def call_text(prompt,modelId="anthropic.claude-3-haiku-20240307-v1:0"):
     return results
 ```
 
-Ejemplo:
+Example:
 
 ```python
 print("Haiku")
-print(call_text("Estoy buscando armar un local de café al paso, dame 5 nombres para un local.")
+print(call_text("I am looking to set up a grab-and-go coffee shop. Give me 5 names for the shop.")
 ```
 
-Paso 5) Ejemplo: Invocar a un modelo multimodal.
+### Step 5: Example - Invoking a Multimodal Model
 
-Aquí el proceso es similar, solo que **hay que agregar el mime type** del archivo enviado, para esto hay una función que en base al nombre del archivo obtiene el mimetype
+The process here is similar, except that **you need to add the MIME type** of the file being sent. For this, there is a function that obtains the MIME type based on the file name.
+
 
 ```python
 def read_mime_type(file_path):
-    # Este hack es para versiones de python anteriores a 3.13
-    # Esta función lee el mime type de un archivo
+    # This hack is for Python versions prior to 3.13
+    # This function reads the MIME type of a file
     mimetypes.add_type('image/webp', '.webp')
     mime_type = mimetypes.guess_type(file_path)
     return mime_type[0]
 ```
 
-Luego para invocar al modelo, los mensajes deben ser los siguientes:
+Then, to invoke the model, the messages should be as follows:
+
 
 ```python
  "messages": [
@@ -144,7 +151,7 @@ Luego para invocar al modelo, los mensajes deben ser los siguientes:
     ]
 ```
 
-La invocación del modelo queda así:
+Model invocation final code:
 
 ```python
 def call_multimodal(file,caption,modelId="anthropic.claude-3-haiku-20240307-v1:0"):
@@ -184,39 +191,39 @@ def call_multimodal(file,caption,modelId="anthropic.claude-3-haiku-20240307-v1:0
     return results
 ```
 
-Ejemplo:
+Example:
 
 ```python
-pic_path = "./meetup_test_image.jpg"
-caption = "Cuantas personas hay en la imagen? cuantas laptos ves? cuantos usan gorro o sombrero?, de que color es el hoddie de la primer persona a la derecha de la foto?"
+pic_path = "./TEST_IMAGE.jpg"
+caption = "How many people are in the image?"
 print("Haiku")
 print(call_image(pic_path,caption,"anthropic.claude-3-haiku-20240307-v1:0"))
 print("Sonnet")
 print(call_image(pic_path,caption,"anthropic.claude-3-sonnet-20240229-v1:0"))
 ```
 
-## 🏁 Creación de un agente de Amazon Bedrock que interactúa con Shopify <a name = "agente"></a>
+## 🏁 Creating an Amazon Bedrock Agent That Interacts with Shopify <a name="agente"></a>
 
-Para crear un agente de Amazon Bedrock:
+To create an Amazon Bedrock agent:
 
-Asegurate de tener los modelos de Bedrock que quieras usar con el acceso habilitado [Instrucciones aqui](https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/model-access-modify.html), en este caso utilizaremos Claude 3 Haiku y Sonnet
+Make sure the Bedrock models you want to use have access enabled. [Instructions here](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access-modify.html). In this case, we will use Claude 3 Haiku and Sonnet.
 
-Luego crear el agente de Bedrock en la consola de AWS:
+Then, create the Bedrock agent in the AWS Console:
 
-1) Ir al servicio Bedrock
-2) Agentes
-3) Crear agente
+1. Go to the Bedrock service.
+2. Select **Agents**.
+3. Click on **Create Agent**.
 
-![Crear agente](https://github.com/ricardoceci/hands-on-bedrock/blob/master/images/create_agent_1.jpg?raw=true)
+![Create Agent](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/images/create_agent_1.jpg?raw=true)
 
-4) Darle un nombre al agente, en nuestro caso "Pausa-Cafetera-Agente
-5) La descripción es opcional.
-6) Uno de los pasos más importantes es elegir el modelo fundacional que va a hacer que nuestro agente funcione adecuadamente, si deseas saber cómo hacer para elegir el mejor modelo que se adapte a tu caso de uso [Aqui](https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/model-evaluation.html) tienes una guía sobre el servicio Amazon Bedrock Model Evaluation .
-7) El siguiente paso es el prompt que va a guiar a tu modelo, aqui tienes que ser lo más preciso posible y sacar a relucir tus habilidades como prompt engineer, si no sabes por donde comenzar, te recomiendo visitar [esta guia](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html) donde vas a encontrar las mejores guidelines para el modelo que estes utilizando, y además otro recurso muy útil es [la consola de anthropic](https://console.anthropic.com/dashboard).
+4. Give the agent a name, in our case, "Pausa-Cafetera-Agente."
+5. The description is optional.
+6. One of the most important steps is selecting the foundational model that will make your agent work effectively. If you want to learn how to choose the best model for your use case, [this guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation.html) provides insights on Amazon Bedrock Model Evaluation.
+7. The next step is defining the prompt that will guide your model. Be as precise as possible and showcase your skills as a prompt engineer. If you’re not sure where to start, I recommend checking out [this guide](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html) for the best practices for the model you’re using. Another helpful resource is [Anthropic's console](https://console.anthropic.com/dashboard).
 
-![Crear agente Paso 2](https://github.com/ricardoceci/hands-on-bedrock/blob/master/images/create_agent_2.jpg?raw=true)
+![Create Agent Step 2](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/images/create_agent_2.jpg?raw=true)
 
-Este es el prompt que utilicé para el agente de ejemplo, te recomiendo escribir el prompt en inglés dado que los modelos fueron entrenados en inglés y a veces escribir en el idioma de origen de entrenamiento ayuda a evitar comportamientos erroneos.
+This is the prompt I used for the example agent. I recommend writing the prompt in English since the models are trained in English, and using the original training language can help avoid erroneous behaviors.
 
 ```
 You are a helpful Bedrock agent working at a coffee shop.
@@ -244,56 +251,52 @@ It's important to note that you should respond to the customer in their preferre
 Your goal is to provide an excellent customer experience by offering helpful recommendations, answering questions, and accurately processing orders through the Shopify API. Remember to be polite, patient, and adapt your language to match the customer's preference.
 
 ```
-8) Configuración adicional, debes permitir al agente que capture input del usuario, dado que seguramente le falte información para procesar la orden, por ejemplo: Necesitará preguntar por los productos que el cliente desea, el nombre, entre otras cosas.
+8) **Additional Configuration**: You need to allow the agent to capture user input, as it will likely require more information to process the order. For example, the agent may need to ask for the products the customer wants, their name, and other details.
 
-![Crear agente Paso 3](https://github.com/ricardoceci/hands-on-bedrock/blob/master/images/create_agent_3.jpg?raw=true)
+![Create Agent Step 3](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/images/create_agent_3.jpg?raw=true)
 
-9) Grupos de acción: Un grupo de acción define las acciones en las que el agente puede ayudar al usuario. Por ejemplo, puedes definir un grupo de acciones que diga TomarPedido que puede tener las siguientes acciones
-- Listar productos
-- Procesar Pedido
+9) **Action Groups**: An action group defines the tasks the agent can assist the user with. For example, you can define an action group named `TakeOrder` that includes the following actions:
+   - List products
+   - Process order
 
-Para crear un grupo de accion vas a necesitar para cada acción:
-- El nombre
-- Los parámetros
+To create an action group, you will need the following for each action:
+   - **Name**
+   - **Parameters**
 
-Los grupos de acción para ejecutarse generalmente invocan una función Lambda, desde Bedrock puedes:
-- Crear una función lambda desde la consola de Bedrock (Seleccionar Creación rápida de una función lambda)
+Action groups are typically executed by invoking a Lambda function. From Bedrock, you can:
+   - Create a Lambda function directly from the Bedrock console (select **Quick Create a Lambda Function**).
 
-![Crear agente Paso 4](https://github.com/ricardoceci/hands-on-bedrock/blob/master/images/create_agent_4.jpg?raw=true)
+![Create Agent Step 4](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/images/create_agent_4.jpg?raw=true)
 
-- Elegir una funcion lambda ya creada [aqui](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-lambda.html) las instrucciones de cómo es el evento y la respuesta esperada por cada action group (grupo de acción)
+   - Use an existing Lambda function. [Instructions here](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-lambda.html) describe the expected event and response format for each action group.
 
-Si eliges crear la función lambda desde la consola de Bedrock, se creará una función en python con un código fuente básico que luego deberás modificar, en este [repo](https://github.com/ricardoceci/hands-on-bedrock/) en el archivo agents/action_group/lambda.py tienes el código de ejemplo modificado para que funcione con el agente.
+If you choose to create the Lambda function from the Bedrock console, it will generate a basic Python function, which you will need to modify. In this [repository](https://github.com/ricardoceci/hands-on-bedrock-en/) under `agents/action_group/lambda.py`, you’ll find an example of modified code to work with the agent.
 
-Estas son las variables que te entregarán la información necesaria:
+### Variables Provided for Action Groups:
+- **`function`**: The name of the invoked action. For example, this could be `get_products` (to list products) or `place_order` (to generate an order in Shopify).
+- **`parameters`**: A dictionary of parameters.
 
-- **function**: es el nombre de la acción invocada, en el caso del ejemplo puede ser: get_products (para listar productos), y place_order (para generar la orden en Shopify)
-- **parameters**: es un diccionario de parámetros.
+### Example: Action Definitions
+In the following example, you can see two actions:
 
+![Create Agent Step 5](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/images/create_agent_5.jpg?raw=true)
 
-En el siguiente ejemplo puedes observar que hay dos acciones:
+![Create Agent Step 6](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/images/create_agent_5.jpg?raw=true)
 
-![Crear agente Paso 5](https://github.com/ricardoceci/hands-on-bedrock/blob/master/images/create_agent_5.jpg?raw=true)
+- **`get_products`**: Does not require any parameters.
+- **`place_order`**: Requires three parameters:
 
-![Crear agente Paso 6](https://github.com/ricardoceci/hands-on-bedrock/blob/master/images/create_agent_5.jpg?raw=true)
+| Parameter      | Description                                                                                         | Type   | Required |
+|----------------|-----------------------------------------------------------------------------------------------------|--------|----------|
+| `customerEmail`| Email of the customer                                                                               | string | False    |
+| `customerName` | Name of the customer                                                                                | string | True     |
+| `products`     | SKUs and quantities to add to the cart in the format [{ variantId: variantId, quantity: QUANTITY }] | array  | True     |
 
-- get_products que no requiere ningun parámetro
-- place_order que lleva 3 parámetros:
+### Example: Handling `get_products` in the Lambda Function
 
-| Parametro     | Descripcion                                                                                         | Tipo   | Obligatorio |
-|---------------|-----------------------------------------------------------------------------------------------------|--------|-------------|
-| customerEmail | Email of the customer                                                                               | string | False       |
-| customerName  | Name of the customer                                                                                | string | True        |
-| products      | SKUs and quantities to add to the cart in the format [{ variantId: variantId, quantity: QUANTITY }] | array  | True        |
+There is a `get_products` function defined to query the Shopify API (for demonstration purposes, all products are returned).
 
-
-
-Entonces, por ejemplo cuando se llame a la función get_products en la función lambda se maneja de esta manera:
-
-Hay una función get_products definida que será la encargada de hacer la query a la API de Shopify (A fines didácticos retornamos todos los productos)
-
-Si quieres que esto funcione en Shopify debes reemplazar las siguientes variables por las de tu tienda:
-
+To make this work with Shopify, replace the following variables with those from your store:
 
 
 ```python
@@ -349,7 +352,7 @@ def get_products():
     return products
 ```
 
-Luego en el handler de la función lambda, se verifica el nombre de la función llamada y se devuelve la respuesta con el formato que el action_group necesita:
+Next, in the Lambda function handler, the name of the called function is verified, and the response is returned in the format required by the action group:
 
 
 ```python
@@ -370,28 +373,28 @@ def lambda_handler(event, context):
         }
 ```
 
-Los fragmentos de código expuestos anteriormente son parte de la función lambda que se encuentra [aqui](https://github.com/ricardoceci/hands-on-bedrock/blob/master/agents/action_group/lambda.py)
+LThe code snippets shown above are part of the Lambda function, which can be found [here](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/agents/action_group/lambda.py).
 
-10) Presionar Guardar y Salir, y listo!, ya el agente esta listo para ser probado.
+10) Press **Save and Exit**, and that’s it! The agent is now ready to be tested.
 
-## El Agente en acción
+## The Agent in Action
 
-Lo siguiente es probar el agente y validar que funcione, desde Bedrock puedes hacer las pruebas del agente, y si durante la conversación clickeas "Ver traza o Show Trace" te va a ir mostrando el proceso de razonamiento, aqui es donde debes prestar especial atención y hacer los ajustes que creas necesarios en el prompt o bien buscar otro modelo si ves que el que elgiste no funciona como esperabas.
+The next step is to test the agent and validate its functionality. From Bedrock, you can test the agent. During the conversation, if you click on **"Show Trace"**, it will display the reasoning process. This is where you should pay close attention and make any necessary adjustments to the prompt or consider switching to a different model if the one chosen does not perform as expected.
 
-Una vez que estes conforme con el agente, puedes crear un Alias, un alias es un ID a través del cual vas a poder invocar al agente desde la API de Amazon Bedrock, cuando crees el alias, te va a crear una versión del agente automáticamente, o puedes apuntar a una versión ya existente, tener diferentes alias y diferentes versiones te va a ayudar a controlar el proceso de despliegue del agente, por ejemplo:
-- Puedes tener un alias "development" que va a ir a las ultimas pruebas del Agente
-- Un alias "preprod" que sería el agente en modo pre producción
-- Un alias "prod" y este es el agente live.
+Once you’re satisfied with the agent, you can create an **Alias**. An alias is an ID you can use to invoke the agent via the Amazon Bedrock API. When you create an alias, a version of the agent is created automatically, or you can point to an existing version. Having multiple aliases and versions allows you to control the agent's deployment process effectively. For example:
+- An alias **"development"** for the latest tests of the agent.
+- An alias **"preprod"** for the agent in pre-production mode.
+- An alias **"prod"** for the live agent.
 
-Luego solo restaría apuntar el alias de producción correspondiente a la versión que desees que este en vivo.
+You then just need to point the production alias to the version you want live.
 
-Cómo invocar el agente
+### How to Invoke the Agent
 
-Para esto, en la carpeta [agents/frontend](https://github.com/ricardoceci/hands-on-bedrock/tree/master/agents/frontend) he dejado un archivo que se llama agent.py.
+For this, in the [agents/frontend](https://github.com/ricardoceci/hands-on-bedrock-en/tree/master/agents/frontend) folder, you’ll find a file called `agent.py`.
 
-Este desarrollo utiliza [Streamlit](https://streamlit.io/), un poderoso framework para realizar aplicaciones de muestra de machine learning
+This implementation uses [Streamlit](https://streamlit.io/), a powerful framework for building machine learning demo applications.
 
-La parte del código que hace la invocación al agente es la siguiente:
+The part of the code that invokes the agent is as follows:
 
 
 ```python
@@ -407,15 +410,16 @@ def invokeAgent(agent_id,agent_alias_id,prompt,session_id):
     return response
 ```
 
-Utilizamos boto3 para consumir la API de AWS, llamamos al bedrock-agent-runtime cliente para poder hacer la invocación del agente.
+We use Boto3 to consume the AWS API, calling the `bedrock-agent-runtime` client to invoke the agent.
 
-Los parámetros que necesitamos pasarle son:
-- agentId
-- agentAliasId
-- inputText (el prompt)
-- sessionId (la sesión, para identificar las conversaciones)
+The parameters we need to pass are:
+- **agentId**
+- **agentAliasId**
+- **inputText** (the prompt)
+- **sessionId** (the session to identify conversations)
 
-En este ejemplo, las variables las estoy definiendo aqui:
+In this example, the variables are defined as follows:
+
 
 ```python
 with st.sidebar:
@@ -424,41 +428,40 @@ with st.sidebar:
     session_id = st.text_input("Sesion Id", key="session_id")
 ```
 
-## Instalación:
+## Installation:
 
-Primero debes habilitar el acceso a los modelos en Bedrock [Instrucciones aqui](https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/model-access-modify.html)
+First, enable access to the models in Bedrock [Instructions here](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access-modify.html).
 
-Requisitos:
-- AWS CLI [Instrucciones aqui](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- Python 3.11 o superior
+### Requirements:
+- **AWS CLI**: [Instructions here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- **Python 3.11 or higher**
 
-Te recomiendo crear un entorno virtual de Python [Instrucciones aqui](https://docs.python.org/es/3.12/tutorial/venv.html)
+It is recommended to create a Python virtual environment. [Instructions here](https://docs.python.org/3.12/tutorial/venv.html).
+
 
 ```
 pip install -r requirements.txt
 ```
 
-## Ejecución
+## Execution
 
 ```
 streamlit run agent.py
 ```
 
-Esto comenzará a ejecutar streamlit en el puerto 8501 y puedes visitar la siguiente URL: http://localhost:8501/ para ver el frontend que invocará al agente
+This will start Streamlit on port 8501, and you can visit the following URL: [http://localhost:8501/](http://localhost:8501/) to view the frontend that will invoke the agent.
 
-![Demo Frontend con Streamlit](https://github.com/ricardoceci/hands-on-bedrock/blob/master/images/demo_front.jpg?raw=true)
+![Demo Frontend with Streamlit](https://github.com/ricardoceci/hands-on-bedrock-en/blob/master/images/demo_front.jpg?raw=true)
 
-## Conclusión
+## Conclusion
 
-Si has seguido todos los pasos has:
-- Consumido la API de Amazon Bedrock desde el Playground de Bedrock y desde Python
-- Has invocado modelos fundacionales de texto y multimodales
-- Has creado un agente desde 0 que consume una API de Shopify
+If you have followed all the steps, you have:
+- Consumed the Amazon Bedrock API from the Bedrock Playground and from Python.
+- Invoked foundational text and multimodal models.
+- Created an agent from scratch that consumes a Shopify API.
 
-
-Algunos links para que sigas tu camino dentro de GenerativeAI
-
-[Workshop AWS generative AI](https://catalog.workshops.aws/building-gen-ai-apps/en-US)
-[Bedrock Knowledge Bases](https://aws.amazon.com/es/bedrock/knowledge-bases/)
-[Anthropic Console](https://console.anthropic.com/dashboard) (Para hacer debug de nuestros prompts)
-[Community.aws](https://community.aws) (más artículos generados por y para la comunidad)
+### Useful Links to Continue Your Generative AI Journey:
+- [AWS Generative AI Workshop](https://catalog.workshops.aws/building-gen-ai-apps/en-US)
+- [Bedrock Knowledge Bases](https://aws.amazon.com/bedrock/knowledge-bases/)
+- [Anthropic Console](https://console.anthropic.com/dashboard) (For debugging prompts)
+- [AWS Community](https://community.aws) (More articles created by and for the community)

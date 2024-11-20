@@ -1,50 +1,50 @@
-1) Estoy buscando armar un local de café al paso, dame 5 nombres para un local.
+1) I am looking to set up a grab-and-go coffee shop. Give me 5 names for the shop.
 
-2) Voy a ir con pausa cafeter, dame un prompt para la generacion de un logo para el local, que represente que es al paso y que es de especialidad
+2) I will go with "Pausa Cafetera." Give me a prompt for generating a logo for the shop that represents it as grab-and-go and specialty.
 
-3) Arma el prompt con todas tus sugerencias, no agregues ningun comentario tuyo, solo el prompt para pasarle al sistema de IA generativa maximo 400 caracteres. (ajustar el máximo de tokens en bedrock)
+3) Create the prompt with all your suggestions. Do not add any comments of your own, just the prompt to pass to the generative AI system, with a maximum of 400 characters. (adjust the maximum tokens in Bedrock)
 
-4) Ahora quiero armar el menu para mi cafeteria, solo voy a vender cafe, puede ser frio o caliente y los siguientes acompañamientos: Alfajor de maicena, budines y facturas.
+4) Now I want to create the menu for my coffee shop. I will only sell coffee, either hot or cold, and the following accompaniments: Alfajor de maicena, budines, and pastries.
 
-Tipos de cafe que voy a servir: Espresso, Latte, Doppio, Flat White, Cortado, Americano, Capuccino.
+Types of coffee I will serve: Espresso, Latte, Doppio, Flat White, Cortado, Americano, Cappuccino.
 
-Quiero que me des para cada opcion del menu:
-- Un nombre que haga referencia a la pausa.
-- Diferentes combos.
+For each menu option, I want you to provide:
+- A name that references "pause."
+- Different combos.
 
-Claro, aquí tienes un menú para "La Pausa Cafetera" con nombres que hacen referencia a la pausa y diferentes combos:
+Sure, here is a menu for "La Pausa Cafetera" with names referencing "pause" and different combos:
 
-Café Espresso:
+**Espresso Coffee:**
 - Pausa Express (solo)
 - Combo Descanso Express (Espresso + Alfajor de maicena)
 
-Café Latte: 
+**Latte Coffee:**
 - Latte Calma Urbana
 - Combo Pausa Prolongada (Latte + Budín)
 
-Café Doppio:
-- Doppio Respiro Doble 
-- Combo Doble Relajación (Doppio + Factura)
+**Doppio Coffee:**
+- Doppio Respiro Doble
+- Combo Doble Relajación (Doppio + Pastry)
 
-Café Flat White:
+**Flat White Coffee:**
 - Flat White Pausa Plana
 - Combo Calma Plana (Flat White + Alfajor de maicena)
 
-Café Cortado:
+**Cortado Coffee:**
 - Cortado Pausa Corta
 - Combo Corto Descanso (Cortado + Budín)
 
-Café Americano:
+**Americano Coffee:**
 - Americano Respiro Americano
-- Combo Pausa del Nuevo Mundo (Americano + Factura)
+- Combo Pausa del Nuevo Mundo (Americano + Pastry)
 
-Capuccino:
-- Capuccino Pausa Espumosa
-- Combo Espuma Relajante (Capuccino + Alfajor de maicena)
+**Cappuccino:**
+- Cappuccino Pausa Espumosa
+- Combo Espuma Relajante (Cappuccino + Alfajor de maicena)
 
-También puedes ofrecer combos de dos o tres productos a elección del cliente.
+You can also offer combos of two or three products chosen by the customer.
 
-5) Prompt para el agente:
+5) Prompt for the agent:
 You are a helpful Bedrock agent working at a coffee shop.
 
 Your goal is to assist customers in placing orders, offering them combos and creating orders by consuming a Shopify API.
@@ -68,6 +68,3 @@ When creating the order through the API, make sure to accurately capture all the
 It's important to note that you should respond to the customer in their preferred language. If they initiate the conversation in a language other than English, reply in that same language to ensure smooth and effective communication.
 
 Your goal is to provide an excellent customer experience by offering helpful recommendations, answering questions, and accurately processing orders through the Shopify API. Remember to be polite, patient, and adapt your language to match the customer's preference.
-
-
-
